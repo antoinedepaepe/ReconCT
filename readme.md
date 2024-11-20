@@ -4,34 +4,17 @@ This repository contains implementations of several CT (Computed Tomography) rec
 
 ## Reconstruction Results
 
-<div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-  <div style="text-align: center;">
-    <img src="assets/gt.png" alt="Gif 1" width="150">
-    <p><strong>GT</strong></p>
-  </div>
-  <div style="text-align: center;">
-    <img src="assets/fpb.png" alt="Gif 2" width="150">
-    <p><strong>FBP</strong></p>
-  </div>
-  <div style="text-align: center;">
-    <img src="assets/wls.gif" alt="Gif 2" width="150">
-    <p><strong>PLS</strong></p>
-  </div>
-  <div style="text-align: center;">
-    <img src="assets/pwls.gif" alt="Gif 2" width="150">
-    <p><strong>PWLS</strong></p>
-  </div>
-  <div style="text-align: center;">
-    <img src="assets/cp.gif" alt="Gif 2" width="150">
-    <p><strong>Chambolle-Pock</strong></p>
-  </div>
-  <div style="text-align: center;">
-    <img src="assets/admm.gif" alt="Gif 2" width="150">
-    <p><strong>ADMM</strong></p>
-  </div>
+<div align="center">
+
+| ![GT](assets/gt.png) | ![FBP](assets/fpb.png) | ![PLS](assets/wls.gif) |
+|----------------------|------------------------|------------------------|
+| **GT**               | **FBP**                | **PLS**                |
+
+| ![PWLS](assets/pwls.gif) | ![Chambolle-Pock](assets/cp.gif) | ![ADMM](assets/admm.gif) |
+|--------------------------|---------------------------------|--------------------------|
+| **PWLS**                 | **Chambolle-Pock**             | **ADMM**                 |
+
 </div>
-
-
 
 ## Problem Formulation
 
