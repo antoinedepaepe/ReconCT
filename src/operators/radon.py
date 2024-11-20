@@ -19,8 +19,7 @@ class Radon(Operator):
         return self.radon.backward(x)
 
     def fbp(self, x: torch.tensor) -> torch.tensor:
-        sinogram = self.radon.forward(x)
-        filtered_sinogram = self.radon.filter_sinogram(sinogram)
+        filtered_sinogram = self.radon.filter_sinogram(x)
         fbp = self.radon.backward(filtered_sinogram)
         return fbp
 
