@@ -2,9 +2,6 @@ from src.operators.radon import Radon
 from src.operators.total_variation import TotalVariation
 import torch
 
-
-import matplotlib.pyplot as plt
-
 class PWLS:
 
     def __init__(self, radon: Radon,
@@ -19,30 +16,21 @@ class PWLS:
               b: torch.Tensor,
               beta: float,
               n_iter: int,
-              weights: torch.Tensor = None):
+              weights: torch.Tensor):
         
-        # if not weights:
-        #     weights = torch.ones_like(b, device = 'cuda')
-
-        x = x0
+        xk = x0
   
-        
-        ones = torch.ones_like(x, device = 'cuda')
+        ones = torch.ones_like(xk, device = 'cuda')
         D_rec = self.AT( weights * self.A(ones))
         D_reg = self.RT(self.R(ones, 1.0), 1.0)
 
         for k in range(n_iter):
+            x_rec = xk - self.AT( weights * (self.A(xk) - b)) / D_rec
+            x_reg = xk - self.RT(self.R(xk)) / D_reg
+            xk = (D_rec * x_rec + beta * (D_reg * x_reg))/(D_rec + beta * D_reg) ;
+            xk[xk < 0] = 0
 
-            x_rec = x - self.AT( weights * (self.A(x) - b)) / D_rec
-            x_reg = x - self.RT(self.R(x)) / D_reg
-            x = (D_rec * x_rec + beta * (D_reg * x_reg))/(D_rec + beta * D_reg) ;
-            x[x < 0] = 0
-            
-            if k % 50 == 0:
-                plt.imshow(x[0, 0, :, :].cpu(), cmap='gray')
-                plt.show()
-
-        return
+        return xk
     
     def A(self, x: torch.Tensor) -> torch.Tensor:
         return self.radon.transform(x)
