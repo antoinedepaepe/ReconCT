@@ -1,4 +1,4 @@
-# Sparse View CT Reconstruction Algorithms
+# Sparse-view CT Reconstruction Algorithms
 
 This repository contains implementations of several CT (Computed Tomography) reconstruction algorithms, focusing on sparse view CT contexts. Sparse view CT poses an ill-posed inverse problem due to limited projection data, requiring advanced reconstruction techniques to achieve high-quality results. 
 
