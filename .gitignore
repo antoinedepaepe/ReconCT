@@ -1,8 +1,16 @@
 # Ignore Python bytecode files
 *.pyc
 
+
+
 # Ignore __pycache__ directories
 __pycache__/
 
 # ignore data
-data/
+# data/
+
+# misc
+.ipynb_checkpoints/
+
+
+
