@@ -1,5 +1,5 @@
-from src.operators.radon import Radon
-from src.operators.total_variation import TotalVariation
+from src.operators.sparsifier import Sparsifier
+from src.operators.operator import Operator
 import torch
 
 def soft_thresholding(x: torch.Tensor, beta: torch.Tensor) -> torch.Tensor:
@@ -8,13 +8,12 @@ def soft_thresholding(x: torch.Tensor, beta: torch.Tensor) -> torch.Tensor:
 
 class ADMM:
 
-    def __init__(self, radon: Radon,
-                       regularizer: TotalVariation):
-        
-        self.radon = radon
-        self.regularizer = regularizer
+    def __init__(self, systmatrix: Operator,
+                          sparsifier: Sparsifier):   
+       
+       self.systmatrix = systmatrix
+       self.sparsifier = sparsifier
 
-    @torch.no_grad()
     def solve(self,
               x0: torch.Tensor,
               b: torch.Tensor,
@@ -32,7 +31,7 @@ class ADMM:
 
         ones = torch.ones_like(x0, device = 'cuda')
         D_rec = self.AT( weights * self.A(ones))
-        D_reg = self.RT(self.R(ones, 1.0), 1.0)
+        D_reg = self.RabsT(self.Rabs(ones))
 
         for k in range(n_iter):
             
@@ -50,16 +49,22 @@ class ADMM:
         return xk
     
     def A(self, x: torch.Tensor) -> torch.Tensor:
-        return self.radon.transform(x)
-            
+          return self.systmatrix.transform(x)
+      
     def AT(self, x: torch.Tensor) -> torch.Tensor:
-        return self.radon.transposed_transform(x)
+        return self.systmatrix.transposed_transform(x)
 
-    def R(self, x: torch.Tensor, factor: float = -1.0) -> torch.Tensor:
-        return self.regularizer.transform(x, factor)
-            
-    def RT(self, x: torch.Tensor, factor: float = -1.0) -> torch.Tensor:
-        return self.regularizer.transposed_transform(x, factor)
+    def R(self, x: torch.Tensor) -> torch.Tensor:
+        return self.sparsifier.transform(x)
+          
+    def RT(self, x: torch.Tensor) -> torch.Tensor:
+        return self.sparsifier.transposed_transform(x)
+    
+    def Rabs(self, x: torch.Tensor) -> torch.Tensor:
+        return self.sparsifier.transform_abs(x)
+          
+    def RabsT(self, x: torch.Tensor) -> torch.Tensor:
+        return self.sparsifier.transposed_transform_abs(x)
 
 
 
