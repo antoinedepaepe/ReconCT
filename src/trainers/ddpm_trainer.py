@@ -2,7 +2,7 @@ import torch
 import torch.nn.functional as F
 import torch.nn as nn
 from torch.utils.data import DataLoader
-from src.engine.trainers.trainer import Trainer
+from src.trainers.trainer import Trainer
 from typing import Tuple
 
 
