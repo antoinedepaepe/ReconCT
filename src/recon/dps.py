@@ -2,6 +2,9 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from tqdm import tqdm
+from typing import Callable
+
+from src.utils.dataloader import unstandardization
 
 def extract(v, t, x_shape):
     """
@@ -18,7 +21,8 @@ class DeepPosteriorSampling:
         because we will need that parametrization when we will use KL div"""
 
     def __init__(self, 
-                 model: nn.Module, 
+                 model: nn.Module,
+                 data_fidelity: Callable, 
                  beta1: float = 1e-4, 
                  betaT: float = 0.02,
                  T: int = 1000,
@@ -48,6 +52,7 @@ class DeepPosteriorSampling:
         for param in self.model.parameters():
             param.requires_grad = False
 
+        self.data_fidelity = data_fidelity
 
     def q_mean_variance(self, x0: torch.Tensor, 
                               xt: torch.Tensor,
@@ -109,12 +114,20 @@ class DeepPosteriorSampling:
                 
                 t = xt.new_ones([xT.shape[0], ], dtype=torch.long) * time_step
                 epsilon = torch.randn_like(xt) if time_step > 0 else 0
-                _ , mean, log_var = self.p_mean_variance(xt=xt, t=t)
+                x0_hat , mean, log_var = self.p_mean_variance(xt=xt, t=t)
     
                 # torch.exp(0.5 * log_var) -> var ** 0.5
                 xt_prime = mean + torch.exp(0.5 * log_var) * epsilon
 
-            with torch.enables_grad():
+                # if t % 50 == 0:
+                #     import matplotlib.pyplot as plt
+                #     plt.imshow(x0_hat.cpu().squeeze())
+                #     plt.show()
+                #     plt.imshow(xt_prime.cpu().squeeze())
+                #     plt.show()
+                #     print('--')
+
+            with torch.enable_grad():
                 xt = xt.requires_grad_()
 
                 # zero existing gradient
@@ -123,7 +136,14 @@ class DeepPosteriorSampling:
 
                 x0_hat, _, _ = self.p_mean_variance(xt=xt, t=t)
                 
-                loss = self.data_fidelity(x0_hat, y, weights)
+                #do not forget to unormalize x0
+                x0_hat_unormalized = unstandardization(x0_hat)
+
+                loss = self.data_fidelity.loss(x0_hat_unormalized, y, weights)
+                loss.backward()
+                
+                del loss
+                
                 grad_data_fidelity = xt.grad
 
                 # gradient normalization
@@ -131,23 +151,9 @@ class DeepPosteriorSampling:
                 grad_data_fidelity = grad_data_fidelity/(grad_data_fidelity_norm+1e-7)
 
                 #gradient descent
-                xt = xt_prime - lam * grad
-            
+                xt = xt_prime - lam * grad_data_fidelity
+        
+        xt = unstandardization(xt)
+        
         return xt
     
-
-if __name__ == "__main__":
-    
-    # Define the model
-    class Dummy(nn.Module):
-        def __init__(self):
-            super(Dummy, self).__init__()
-            self.conv = nn.Conv2d(3, 3, 1)
-        def forward(self, x, t):
-            return self.conv(x)
-
-    model = Dummy().to('cuda')
-    gs = GaussianDiffusionSampler(model=model)
-
-    x = torch.randn(16, 3, 16, 16).to('cuda')
-    gs.inference(x)

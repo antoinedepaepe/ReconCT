@@ -54,3 +54,13 @@ ct_train_dataset = CTDataset(root_dir=root_dir_train,
 ct_train_dataloader = DataLoader(ct_train_dataset,
                            batch_size=1, 
                            shuffle=True)
+
+# Usage example
+root_dir_test = "./data/test_slices"
+ct_test_dataset = CTDataset(root_dir=root_dir_test, 
+                             transform=standardization)
+
+# Adjust batch_size to fit in memory
+ct_test_dataloader = DataLoader(ct_test_dataset,
+                                batch_size=1, 
+                                shuffle=False)
