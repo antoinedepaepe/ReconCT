@@ -7,12 +7,13 @@ class Radontr(Operator):
 
     def __init__(self, n_rays: int, 
                        angles: torch.Tensor,
-                       volume: tr.Volume2D
+ #                      volume: tr.Volume2D
                        ) -> None:
         
         self.radon = tr.ParallelBeam(det_count = n_rays, 
-                                     angles = angles, 
-                                     volume = volume)
+                                     angles = angles
+                                     # volume = volume
+                                     )
 
     
     
