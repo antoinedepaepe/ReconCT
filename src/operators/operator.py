@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-import torch
+
 
 class Operator(ABC):
     """
@@ -8,13 +8,14 @@ class Operator(ABC):
     """
 
     @abstractmethod
-    def transform(self, x: torch.Tensor, *args, **kwargs) -> torch.Tensor:
+    # def transform(self, x: torch.Tensor, *args, **kwargs) -> torch.Tensor:
+    def transform(self, x: any, *args, **kwargs) -> any:
         """
         Applies a transformation to the input tensor.
         
         Args:
             x (torch.Tensor): The input tensor to transform.
-            *args, **kwargs: Additional parameters for the transformation.
+            *args, **kwargs: Additional parameters for the transsformation.
 
         Returns:
             torch.Tensor: The transformed tensor.
@@ -22,7 +23,8 @@ class Operator(ABC):
         pass
 
     @abstractmethod
-    def transposed_transform(self, x: torch.Tensor, *args, **kwargs) -> torch.Tensor:
+    # def transposed_transform(self, x: torch.Tensor, *args, **kwargs) -> torch.Tensor:
+    def transposed_transform(self, x: any, *args, **kwargs) -> any:
         """
         Applies the transposed version of the transformation to the input tensor.
         
