@@ -2,8 +2,7 @@ from src.operators.sparsifier import Sparsifier
 from src.operators.operator import Operator
 import torch
 
-def soft_thresholding(x: torch.Tensor, beta: torch.Tensor) -> torch.Tensor:
-    return x.sign() * torch.maximum(x.abs() - beta, torch.tensor(0).cuda())
+
 
 
 class ADMM:
@@ -43,7 +42,7 @@ class ADMM:
                 xk[xk < 0] = 0
 
             # second proximal
-            zk = soft_thresholding(self.R(xk) + uk, beta / rho)
+            zk = self.soft_thresholding(self.R(xk) + uk, beta / rho)
             uk = uk + self.R(xk) - zk
 
         return xk
@@ -65,6 +64,9 @@ class ADMM:
           
     def RabsT(self, x: torch.Tensor) -> torch.Tensor:
         return self.sparsifier.transposed_transform_abs(x)
+    
+    def soft_thresholding(self, x: torch.Tensor, beta: torch.Tensor) -> torch.Tensor:
+        return x.sign() * torch.maximum(x.abs() - beta, torch.tensor(0).cuda())
 
 
 
