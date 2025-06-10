@@ -39,7 +39,7 @@ def check_transpose(A:Operator,N:int,Ni:int,istr:bool):
     y = y.to(device)
   
   Ax = A.transform(x)
-  ATy = A.transposed_transform(y)
+  ATy = dimy[1]*A.transposed_transform(y)/(np.pi/2)
   
   if istr==True:
     x = x.squeeze().cpu()
