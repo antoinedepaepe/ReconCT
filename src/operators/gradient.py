@@ -13,6 +13,8 @@ class Gradient(Sparsifier):
             self.diag_weights = sqrt(1/2)
         elif weight == 'sqrt':
             self.diag_weights = sqrt(sqrt(1/2))
+        elif weight == 'ones':    
+            self.diag_weights = 1
 
 
     def transform(self, x: torch.Tensor) -> torch.Tensor:

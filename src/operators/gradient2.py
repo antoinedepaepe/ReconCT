@@ -1,10 +1,12 @@
 from math import sqrt
+from backends.backend_factory import get_backend
 
 class Gradient:
-    def __init__(self, weight: str = 'standard', backend=None):
-        if backend is None:
-            raise ValueError("Un backend est requis (torch ou numpy)")
-        self.backend = backend
+    def __init__(self, 
+                 weight: str = 'standard', 
+                 backend_name='numpy'):
+        self.backend = get_backend(backend_name)
+        
 
         if weight == 'standard':
             self.diag_weights = sqrt(1/2)
