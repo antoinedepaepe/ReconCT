@@ -55,7 +55,7 @@ class GaussianDiffusionTrainer(Trainer):
 
         b, c, h, w = x0.shape
 
-        t = torch.randint(self.T, size=(b, )).to(self.device)
+        t = torch.randint(self.T, size=(b, )).to(self.device)    # size=(b, ): convention pour tenseur de taille b avec 1 dimension
         epsilon = torch.randn_like(x0).to(self.device)
         xt = (
             extract(self.sqrt_alphas_bar, t, (b, c, h, w)) * x0 +

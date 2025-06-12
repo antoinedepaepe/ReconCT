@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-import torch
+# import torch
 
 class Sparsifier(ABC):
     """
@@ -8,7 +8,7 @@ class Sparsifier(ABC):
     """
 
     @abstractmethod
-    def transform(self, x: torch.Tensor, *args, **kwargs) -> torch.Tensor:
+    def transform(self, x: any, *args, **kwargs) :
         """
         Applies a transformation to the input tensor.
         
@@ -22,7 +22,7 @@ class Sparsifier(ABC):
         pass
 
     @abstractmethod
-    def transposed_transform(self, x: torch.Tensor, *args, **kwargs) -> torch.Tensor:
+    def transposed_transform(self, x: any, *args, **kwargs) :
         """
         Applies the transposed version of the transformation to the input tensor.
         
@@ -36,7 +36,7 @@ class Sparsifier(ABC):
         pass
 
     @abstractmethod
-    def transform_abs(self, x: torch.Tensor, *args, **kwargs) -> torch.Tensor:
+    def transform_abs(self, x: any, *args, **kwargs) :
         """
         Applies a transformation (with absolute values) to the input tensor.
         
@@ -50,7 +50,7 @@ class Sparsifier(ABC):
         pass
 
     @abstractmethod
-    def transposed_transform_abs(self, x: torch.Tensor, *args, **kwargs) -> torch.Tensor:
+    def transposed_transform_abs(self, x: any, *args, **kwargs) -> torch.Tensor:
         """
         Applies the transposed version of the transformation (with absolute values) to the input tensor.
         
