@@ -157,7 +157,7 @@ class ResBlock(nn.Module):
         h = self.attn(h)
         return h
 
-
+# from https://github.com/w86763777/pytorch-ddpm/blob/master/model.py
 class UNet(nn.Module):
     def __init__(self, in_chan, 
                        out_chan,
