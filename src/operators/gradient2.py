@@ -1,5 +1,5 @@
 from math import sqrt
-from backends.backend_factory import get_backend
+# from backends.backend_factory import get_backend
 
 class Gradient:
     def __init__(self, 

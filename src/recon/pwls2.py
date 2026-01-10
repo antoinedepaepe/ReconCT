@@ -1,7 +1,7 @@
 from src.operators.sparsifier import Sparsifier
 from src.operators.operator import Operator
 # import torch
-from backends.backend_factory import get_backend
+# from backends.backend_factory import get_backend
 
 class PWLS:
 
