@@ -50,7 +50,7 @@ class ChambollePock:
 
             xbar = xk + theta * (xk - x_km1)
 
-        return xbar
+        return xk
     
     def A(self, x: torch.Tensor) -> torch.Tensor:
         return self.systmatrix.transform(x)
